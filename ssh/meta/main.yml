@@ -1,0 +1,10 @@
+galaxy_info:
+  author: Jonathan Coutu
+  description: ssh
+  license: GPL-3.0-only
+  min_ansible_version: '2.12'
+  platforms:
+    - name: Debian
+      release: bullseye
+  galaxy_tags: [ssh, debian, jocoutu]
+dependencies: []

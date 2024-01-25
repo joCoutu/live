@@ -1,0 +1,68 @@
+---
+- name: Sftp | create group
+  become: true
+  ansible.builtin.group:
+    name: sftp
+    state: present
+
+- name: Sftp | user_add
+  become: true
+  ansible.builtin.user:
+    name: "{{ user }}"
+    group: "sftp"
+    home: "/mnt/{{ user }}"
+    shell: /usr/sbin/nologin
+
+- name: Sftp | passwd_user
+  become: true
+  ansible.builtin.shell:
+    cmd: "echo '{{ user }}:{{ password }}' | sudo chpasswd"
+
+- name: Sftp | ChrootDirectory
+  become: true
+  ansible.builtin.file:
+    path: /mnt
+    state: directory
+    mode: "0755"
+    group: root
+    owner: root
+
+- name: Sftp | data dir
+  become: true
+  ansible.builtin.file:
+    path: "/mnt/{{ user }}"
+    state: directory
+    mode: "0755"
+    group: "sftp"
+    owner: "{{ user }}"
+
+- name: Sftp | sshd_config
+  become: true
+  ansible.builtin.copy:
+    content: |
+      ChallengeResponseAuthentication no
+      UsePAM yes
+      X11Forwarding no
+      PrintMotd no
+      AcceptEnv LANG LC_*
+      Subsystem       sftp    /usr/lib/openssh/sftp-server
+      Match Group sftp
+        PasswordAuthentication yes
+        ForceCommand internal-sftp
+        ChrootDirectory /mnt/
+        AllowTcpForwarding no
+        PermitTunnel no
+    dest: /etc/ssh/sshd_config
+    force: true
+    group: root
+    owner: root
+    mode: "0644"
+
+- name: Sftp | restart service
+  become: true
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+
+# https://www.youtube.com/watch?v=6CnlrtHVlrI
+
