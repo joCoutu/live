@@ -4,13 +4,17 @@
 # FROM debianLive
 sudo passwd user
 
-sudo apt install git ansible -y
+sudo apt install git ansible sshpass -y
 git clone https://github.com/jocoutu/live live
-echo "b(){
+cd live
+echo 'b(){
     cd $PWD
-    if [ -z "$3" ] ; then ALIAS="less live/roles/$2/README.md"
-    else ALIAS=" ansible -i $1 all -m include_role -a name=live/roles/$2 -e cmd=$3 ${*:4}"; fi
+    if [ -z "$3" ] ; then ALIAS="less $2/README.md"
+    else ALIAS=" ansible -i $1 all -m include_role -a name=$2 -e cmd=$3 ${*:4}"; fi
     $ALIAS
-}" >> ~/.bashrc
+}' >> ~/.bashrc
 source ~/.bashrc
+
+b 'localhost,' ssh sftp -e user=user1 -e password=p1
+sshfs user1@192.168.3.100:/user1 nas
 ```
