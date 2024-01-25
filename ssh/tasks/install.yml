@@ -1,6 +1,0 @@
----
-- name: Install | ssh
-  become: true
-  ansible.builtin.apt:
-    name:
-      - ssh

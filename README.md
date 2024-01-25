@@ -4,7 +4,9 @@
 # FROM debianLive
 sudo passwd user
 
-sudo apt install git ansible sshpass -y
+sudo apt install git ansible ssh sshpass -y
+ssh-keyscan -H localhost >> ~/.ssh/known_hosts
+
 git clone https://github.com/jocoutu/live live
 cd live
 echo 'b(){

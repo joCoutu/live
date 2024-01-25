@@ -1,7 +1,4 @@
 ---
-- name: Main | install
-  ansible.builtin.import_tasks: install.yml
-
 - name: Main | sftp
   ansible.builtin.import_tasks: sftp.yml
   when: cmd == 'sftp'
