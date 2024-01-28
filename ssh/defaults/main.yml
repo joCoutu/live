@@ -1,2 +1,4 @@
 ---
 cmd: install
+user: u1
+password: p1

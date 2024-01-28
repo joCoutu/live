@@ -5,10 +5,12 @@
 sudo passwd user
 
 sudo apt install git ansible ssh sshpass -y
-ssh-keyscan -H localhost >> ~/.ssh/known_hosts
+mkdir ~/.ssh/
+ssh user@localhost # add to ~/.ssh/known_hosts
 
 git clone https://github.com/jocoutu/live live
 cd live
+echo "PWD=$(pwd)"
 echo 'b(){
     cd $PWD
     if [ -z "$3" ] ; then ALIAS="less $2/README.md"
@@ -17,6 +19,6 @@ echo 'b(){
 }' >> ~/.bashrc
 source ~/.bashrc
 
-b 'localhost,' ssh sftp -e user=user1 -e password=p1
-sshfs user1@192.168.3.100:/user1 nas
+b 'localhost,' ssh sftp -e user=u1 -e password=p1
+sshfs u1@192.168.3.100:/u1 Pictures
 ```
